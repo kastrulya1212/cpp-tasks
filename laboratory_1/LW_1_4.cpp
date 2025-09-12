@@ -6,30 +6,54 @@
 using namespace std;
 
 
+const int VALUES_LENGTH = 9;
+const int VALUES[VALUES_LENGTH] = {1, 2, 5, 10, 50, 100, 500, 1000, 5000};
+
+
 
 // Struct "NewData"
 struct NewData
 {
-    double first;
+    int first;
     int second;
 
-    void init(double check_first, int check_second);
+    void init(int check_first, int check_second);
     void read();
     void display();
-    double power();
+    double summa();
 
-    NewData(double inp_first = 0, int inp_second = 0);
+    NewData(int inp_first = 1, int inp_second = 1);
     NewData& operator=(NewData& obj);
 
-    friend NewData* make_NewData(double inp_first, int inp_second);
+    friend NewData* make_NewData(int inp_first, int inp_second);
 };
 
 
 
 // Functions realizations for struct "NewData"
-void NewData::init(double check_first, int check_second)
+void NewData::init(int check_first, int check_second)
 {
     cout << "INIT checking..." << endl;
+    if (check_first<=0 || check_second<=0)
+    {
+        cout << "ERROR! Unexpected values for variables: ";
+        cout << check_first << " " << check_second << endl;
+        exit(0);
+    }
+
+    int flag_condition = 0;
+    for (int i=0; i<VALUES_LENGTH; i++)
+    {
+        if (check_first == VALUES[i]) 
+            flag_condition = 1;
+    }
+    
+    if (!flag_condition)
+    {
+        cout << "ERROR! Banknote value not in list" << endl;
+        exit(0);
+    }
+
     cout << "INIT all is fine!" << endl;
 }
 
@@ -37,7 +61,7 @@ void NewData::read()
 {
     double check_first; 
     int check_second;
-
+    
     cout << "Введите значение для поля first: "; cin >> check_first;
     cout << "Введите значение для поля second: "; cin >> check_second;
     init(check_first, check_second);
@@ -53,12 +77,12 @@ void NewData::display()
     cout << "Вывод second: " << second << endl;
 }
 
-double NewData::power()
+double NewData::summa()
 {
-    return pow(first, second);
+    return first*second;
 }
 
-NewData::NewData(double inp_first, int inp_second)
+NewData::NewData(int inp_first, int inp_second)
 {
     init(inp_first, inp_second);
 
@@ -80,7 +104,7 @@ NewData& NewData::operator=(NewData& obj)
 
 
 // External functions
-NewData* make_NewData(double inp_first = 0, int inp_second = 0)
+NewData* make_NewData(int inp_first = 1, int inp_second = 1)
 {   // !IMPORTANT TO RELEASE THE MEMORY!
     return new NewData(inp_first, inp_second);
 }
@@ -95,7 +119,7 @@ int main()
     cout << "Check object test..." << endl << endl;
     NewData obj1 = NewData();
     NewData obj2 = NewData(2,5);
-    NewData* obj3 = make_NewData(4,4);              // remember to release the memory
+    NewData* obj3 = make_NewData(100,4);              // remember to release the memory
     cout << "obj1 statistic - "; obj1.display();
     cout << "obj2 statistic - "; obj2.display();
     cout << "obj3 statistic - "; obj3->display();
@@ -119,8 +143,8 @@ int main()
     obj1.read();
     obj1.display();
 
-    // object power func test
-    cout << endl << endl << "Check object power func..." << endl;
+    // object summa func test
+    cout << endl << endl << "Check object summa func..." << endl;
     obj1.display();
-    cout << "power func result: " << obj1.power() << endl;
+    cout << "summa func result: " << obj1.summa() << endl;
 } 

@@ -10,32 +10,38 @@ using namespace std;
 // Struct "NewData"
 struct NewData
 {
-    double first;
+    int first;
     int second;
 
-    void init(double check_first, int check_second);
+    void init(int check_first, int check_second);
     void read();
     void display();
-    double power();
+    int ipart();
 
-    NewData(double inp_first = 0, int inp_second = 0);
+    NewData(int inp_first = 1, int inp_second = 1);
     NewData& operator=(NewData& obj);
 
-    friend NewData* make_NewData(double inp_first, int inp_second);
+    friend NewData* make_NewData(int inp_first, int inp_second);
 };
 
 
 
 // Functions realizations for struct "NewData"
-void NewData::init(double check_first, int check_second)
+void NewData::init(int check_first, int check_second)
 {
     cout << "INIT checking..." << endl;
+    if (check_first<=0 || check_second<=0)
+    {
+        cout << "ERROR! Unexpected values for variables: ";
+        cout << check_first << " " << check_second << endl;
+        exit(0);
+    }
     cout << "INIT all is fine!" << endl;
 }
 
 void NewData::read()
 {
-    double check_first; 
+    int check_first;
     int check_second;
 
     cout << "Введите значение для поля first: "; cin >> check_first;
@@ -53,12 +59,17 @@ void NewData::display()
     cout << "Вывод second: " << second << endl;
 }
 
-double NewData::power()
+int NewData::ipart()
 {
-    return pow(first, second);
+    if (second == 0) 
+    {
+        cout << "ERROR! Devision by 0" << endl;
+        exit(0);
+    }
+    return (first/second);
 }
 
-NewData::NewData(double inp_first, int inp_second)
+NewData::NewData(int inp_first, int inp_second)
 {
     init(inp_first, inp_second);
 
@@ -80,7 +91,7 @@ NewData& NewData::operator=(NewData& obj)
 
 
 // External functions
-NewData* make_NewData(double inp_first = 0, int inp_second = 0)
+NewData* make_NewData(int inp_first = 1, int inp_second = 1)
 {   // !IMPORTANT TO RELEASE THE MEMORY!
     return new NewData(inp_first, inp_second);
 }
@@ -94,7 +105,7 @@ int main()
     // object creation tests
     cout << "Check object test..." << endl << endl;
     NewData obj1 = NewData();
-    NewData obj2 = NewData(2,5);
+    NewData obj2 = NewData(1.5,2.5);
     NewData* obj3 = make_NewData(4,4);              // remember to release the memory
     cout << "obj1 statistic - "; obj1.display();
     cout << "obj2 statistic - "; obj2.display();
@@ -119,8 +130,8 @@ int main()
     obj1.read();
     obj1.display();
 
-    // object power func test
-    cout << endl << endl << "Check object power func..." << endl;
+    // object ipart func test
+    cout << endl << endl << "Check object ipart func..." << endl;
     obj1.display();
-    cout << "power func result: " << obj1.power() << endl;
+    cout << "ipart func result - " << obj1.ipart() << endl;
 } 

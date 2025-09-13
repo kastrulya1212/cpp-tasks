@@ -6,64 +6,40 @@
 using namespace std;
 
 
-const int VALUES_LENGTH = 9;
-const int VALUES[VALUES_LENGTH] = {1, 2, 5, 10, 50, 100, 500, 1000, 5000};
-
-
 
 // Struct "NewData"
 struct NewData
 {
-    int first;
-    int second;
+    double first;
+    double second;
 
-    void init(int check_first, int check_second);
+    void init(double check_first, double check_second);
     void read();
     void display();
-    int summa();
+    bool rangecheck(double cheked_num);
 
-    NewData(int inp_first = 1, int inp_second = 1);
+    NewData(double inp_first = 1, double inp_second = 1);
     NewData& operator=(NewData& obj);
 
-    friend NewData* make_NewData(int inp_first, int inp_second);
+    friend NewData* make_NewData(double inp_first, double inp_second);
 };
 
 
 
 // Functions realizations for struct "NewData"
-void NewData::init(int check_first, int check_second)
+void NewData::init(double check_first, double check_second)
 {
     cout << "INIT checking..." << endl;
-    if (check_first<=0 || check_second<=0)
-    {
-        cout << "ERROR! Unexpected values for variables: ";
-        cout << check_first << " " << check_second << endl;
-        exit(0);
-    }
-
-    int flag_condition = 0;
-    for (int i=0; i<VALUES_LENGTH; i++)
-    {
-        if (check_first == VALUES[i]) 
-            flag_condition = 1;
-    }
-    
-    if (!flag_condition)
-    {
-        cout << "ERROR! Banknote value not in list" << endl;
-        exit(0);
-    }
-
     cout << "INIT all is fine!" << endl;
 }
 
 void NewData::read()
 {
-    int check_first; 
-    int check_second;
+    double check_first; 
+    double check_second;
     
-    cout << "Введите номинал купюры(first): "; cin >> check_first;
-    cout << "Введите кол-во купюр (second): "; cin >> check_second;
+    cout << "Введите левую границу диапазона: "; cin >> check_first;
+    cout << "Введите правую границу диапазона: "; cin >> check_second;
     init(check_first, check_second);
     
     first = check_first;
@@ -77,12 +53,12 @@ void NewData::display()
     cout << "Вывод second: " << second << endl;
 }
 
-int NewData::summa()
+bool NewData::rangecheck(double checked_num)
 {
-    return first*second;
+    return ((first <= checked_num) && (checked_num <= second));
 }
 
-NewData::NewData(int inp_first, int inp_second)
+NewData::NewData(double inp_first, double inp_second)
 {
     init(inp_first, inp_second);
 
@@ -104,7 +80,7 @@ NewData& NewData::operator=(NewData& obj)
 
 
 // External functions
-NewData* make_NewData(int inp_first = 1, int inp_second = 1)
+NewData* make_NewData(double inp_first = 1, double inp_second = 1)
 {   // !IMPORTANT TO RELEASE THE MEMORY!
     return new NewData(inp_first, inp_second);
 }
@@ -143,8 +119,15 @@ int main()
     obj1.read();
     obj1.display();
 
-    // object summa func test
-    cout << endl << endl << "Check object summa func..." << endl;
+    // object rangecheck func test
+    cout << endl << endl << "Check object rangecheck func..." << endl;
     obj1.display();
-    cout << "summa func result: " << obj1.summa() << endl;
+
+    cout << "Введите проверяемое число: "; 
+    double num; cin >> num;
+    
+    cout << "rangecheck func result: "; 
+    bool result = obj1.rangecheck(num);
+    if (result == true) cout << "Значение входит в диапазон" << endl;
+    else cout << "Значение не входит в диапазон" << endl;
 } 

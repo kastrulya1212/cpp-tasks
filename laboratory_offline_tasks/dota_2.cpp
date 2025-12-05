@@ -70,6 +70,7 @@ string who_win(string senate) {
         }
         exit_i++;
     }
+    return "None";
 }
 
 
